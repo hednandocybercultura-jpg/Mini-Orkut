@@ -1,214 +1,166 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
   <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mini-Orkut</title>
     <style>
-      body {
-        background-color: #f0f2f5;
-        font-family: Arial, sans-serif;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding-top: 50px;
-        gap: 20px;
-      }
+      body { background-color: #f0f2f5; font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; padding-top: 50px; gap: 20px; }
+      .escondido { display: none !important; }
       
-      /* Uma classe mágica para esconder coisas da tela */
-      .escondido {
-        display: none !important;
-      }
-
       /* Tela de Login */
-      .tela-login {
-        background-color: white;
-        padding: 40px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        text-align: center;
-      }
-
-      .btn-google {
-        background-color: #4285F4;
-        color: white;
-        border: none;
-        padding: 15px 20px;
-        border-radius: 5px;
-        font-size: 16px;
-        cursor: pointer;
-        font-weight: bold;
-      }
-
-      /* Container Principal do App (Perfil + Mural) */
-      .app-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
-      }
-
-      .perfil-card {
-        background-color: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        text-align: center;
-        width: 300px;
-      }
-
-      .perfil-card img {
-        border-radius: 50%;
-        width: 150px;
-        height: 150px;
-        object-fit: cover;
-      }
-
-      .btn-sair {
-        background-color: #dc3545;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-top: 10px;
-      }
-
-      .mural-card {
-        background-color: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        width: 400px;
-      }
-
-      textarea {
-        width: 100%;
-        height: 60px;
-        margin-bottom: 10px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        padding: 10px;
-        font-family: Arial, sans-serif;
-        box-sizing: border-box;
-      }
-
-      button {
-        background-color: #0056b3;
-        color: white;
-        border: none;
-        padding: 10px 15px;
-        border-radius: 5px;
-        cursor: pointer;
-        width: 100%;
-        font-weight: bold;
-      }
-
-      /* Agora o recado tem espaço para a foto da pessoa */
-      .recado {
-        background-color: #f9f9f9;
-        padding: 10px;
-        margin-top: 20px;
-        border-left: 4px solid #0056b3;
-        display: flex; /* Organiza foto e texto lado a lado */
-        gap: 15px;
-        align-items: center;
-      }
-
-      .recado img {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-      }
+      .tela-login { background-color: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center; }
+      .btn-google { background-color: #4285F4; color: white; border: none; padding: 15px 20px; border-radius: 5px; font-size: 16px; cursor: pointer; font-weight: bold; }
+      
+      /* App Principal */
+      .app-container { display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%; max-width: 500px; }
+      .perfil-card { background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center; width: 100%; box-sizing: border-box; }
+      .perfil-card img { border-radius: 50%; width: 120px; height: 120px; object-fit: cover; }
+      .btn-sair { background-color: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+      
+      /* Mural */
+      .mural-card { background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 100%; box-sizing: border-box; }
+      textarea { width: 100%; height: 80px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc; padding: 10px; font-family: Arial, sans-serif; box-sizing: border-box; resize: none; }
+      .btn-enviar { background-color: #0056b3; color: white; border: none; padding: 12px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold; }
+      
+      /* Recados */
+      .recado { background-color: #f9f9f9; padding: 15px; margin-top: 15px; border-left: 5px solid #0056b3; display: flex; gap: 15px; align-items: flex-start; border-radius: 0 5px 5px 0; }
+      .recado img { width: 45px; height: 45px; border-radius: 50%; }
+      .conteudo-recado { flex: 1; }
+      .nome-usuario { font-weight: bold; color: #333; margin: 0; }
+      .texto-recado { margin: 5px 0; color: #555; line-height: 1.4; }
+      .btn-excluir { background: none; border: none; color: #dc3545; font-size: 12px; cursor: pointer; padding: 0; font-weight: bold; text-decoration: underline; }
     </style>
   </head>
   <body>
 
     <div id="tela-login" class="tela-login">
-      <h1>Bem-vindo ao Mini-Orkut</h1>
-      <p>Faça login para ver a comunidade.</p>
+      <h1>Mini-Orkut</h1>
+      <p>Conecte-se para deixar recados.</p>
       <button id="btn-login-google" class="btn-google">Entrar com o Google</button>
     </div>
 
     <div id="app-principal" class="app-container escondido">
       
       <div class="perfil-card">
-        <h1>Meu Perfil</h1>
-        <img id="foto-perfil" src="" alt="Minha Foto">
-        <p><strong>Nome:</strong> <span id="nome-perfil"></span></p>
-        <p><strong>Status:</strong> Construindo minha primeira rede social!</p>
+        <img id="foto-perfil" src="" alt="Foto">
+        <h2 id="nome-perfil">Carregando...</h2>
         <button id="btn-sair" class="btn-sair">Sair da Conta</button>
       </div>
 
       <div class="mural-card">
-        <h2>Scrapbook</h2>
-        <textarea id="campo-recado" placeholder="Deixe um recado..."></textarea>
-        <button id="botao-enviar">Enviar Recado</button>
+        <h3>Scrapbook</h3>
+        <textarea id="campo-recado" placeholder="Escreva algo legal no mural..."></textarea>
+        <button id="botao-enviar" class="btn-enviar">Postar Recado</button>
         <div id="lista-recados"></div>
       </div>
 
     </div>
 
     <script type="module">
-// ... (mantenha as suas importações e a configuração do firebaseConfig lá no topo)
+      // Importando as ferramentas necessárias do Firebase
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+      import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+      import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
 
-// IMPORTANTE: Adicionei 'deleteDoc' e 'doc' na lista de funções do firestore lá em cima
-import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+      // Sua Configuração (NÃO ALTERAR)
+      const firebaseConfig = {
+        apiKey: "AIzaSyDKA5A8Xp93HMnsXkWwioMtJGrvXtZZpVU",
+        authDomain: "mini-365cd.firebaseapp.com",
+        projectId: "mini-365cd",
+        storageBucket: "mini-365cd.firebasestorage.app",
+        messagingSenderId: "790691244828",
+        appId: "1:790691244828:web:db1ac4c74a8c7fa11568d9"
+      };
 
-// ... (mantenha a inicialização do app, auth e bancoDeDados)
+      // Inicialização
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+      const auth = getAuth(app);
+      const provider = new GoogleAuthProvider();
 
-// AÇÃO: Enviar um Recado (Mantemos igual, mas agora salvamos o ID do autor)
-botaoEnviar.addEventListener('click', async function() {
-  const textoDigitado = campoRecado.value;
-  if (textoDigitado === '' || !usuarioLogado) return; 
+      // Referências do HTML
+      const telaLogin = document.getElementById('tela-login');
+      const appPrincipal = document.getElementById('app-principal');
+      const btnLoginGoogle = document.getElementById('btn-login-google');
+      const btnSair = document.getElementById('btn-sair');
+      const fotoPerfil = document.getElementById('foto-perfil');
+      const nomePerfil = document.getElementById('nome-perfil');
+      const campoRecado = document.getElementById('campo-recado');
+      const botaoEnviar = document.getElementById('botao-enviar');
+      const listaRecados = document.getElementById('lista-recados');
 
-  await addDoc(gavetaRecados, {
-    nome: usuarioLogado.displayName,
-    foto: usuarioLogado.photoURL,
-    uid: usuarioLogado.uid, // Salvamos o CPF único do Google para saber que foi VOCÊ quem postou
-    texto: textoDigitado,
-    dataHora: Date.now()
-  });
+      let usuarioLogado = null;
 
-  campoRecado.value = ''; 
-});
+      // --- LOGICA DE LOGIN ---
+      btnLoginGoogle.onclick = async () => {
+        try { await signInWithPopup(auth, provider); } catch (e) { console.error(e); }
+      };
 
-// FUNÇÃO NOVA: Deletar Recado
-window.deletarRecado = async function(idDoRecado) {
-  if (confirm("Tem certeza que deseja excluir este recado?")) {
-    const referenciaDoRecado = doc(bancoDeDados, "recados", idDoRecado);
-    await deleteDoc(referenciaDoRecado);
-  }
-}
+      btnSair.onclick = () => signOut(auth);
 
-// OUVIR MURAL: Atualizado para mostrar o botão de excluir
-const regraDeBusca = query(gavetaRecados, orderBy("dataHora", "desc"));
-onSnapshot(regraDeBusca, (resultado) => {
-  listaRecados.innerHTML = ''; 
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          usuarioLogado = user;
+          nomePerfil.innerText = user.displayName;
+          fotoPerfil.src = user.photoURL;
+          telaLogin.classList.add('escondido');
+          appPrincipal.classList.remove('escondido');
+        } else {
+          usuarioLogado = null;
+          telaLogin.classList.remove('escondido');
+          appPrincipal.classList.add('escondido');
+        }
+      });
 
-  resultado.forEach((documento) => {
-    const recado = documento.data();
-    const id = documento.id; // Pegamos o ID único gerado pelo Firebase
-    
-    const fotoParaMostrar = recado.foto ? recado.foto : "https://via.placeholder.com/40";
+      // --- LOGICA DO MURAL ---
+      
+      // Função Global para Excluir (necessário usar window. para o HTML enxergar)
+      window.excluirRecado = async (id) => {
+        if (confirm("Tem certeza que deseja apagar este recado?")) {
+          await deleteDoc(doc(db, "recados", id));
+        }
+      };
 
-    // LÓGICA DE ADMIN: Só mostra o botão se o recado for meu (ou se eu for o dono da rede)
-    let botaoExcluir = '';
-    if (usuarioLogado && (recado.uid === usuarioLogado.uid)) {
-      botaoExcluir = `<button onclick="deletarRecado('${id}')" style="background: none; color: red; width: auto; font-size: 12px; padding: 0; margin-top: 5px;">[Excluir]</button>`;
-    }
+      botaoEnviar.onclick = async () => {
+        const texto = campoRecado.value.trim();
+        if (!texto || !usuarioLogado) return;
 
-    listaRecados.innerHTML += `
-      <div class="recado">
-        <img src="${fotoParaMostrar}" alt="Foto">
-        <div style="flex: 1;">
-          <p style="margin: 0;"><strong>${recado.nome}</strong></p>
-          <p style="margin: 5px 0 0 0;">${recado.texto}</p>
-          ${botaoExcluir}
-        </div>
-      </div>
-    `;
-  });
-});
+        await addDoc(collection(db, "recados"), {
+          nome: usuarioLogado.displayName,
+          foto: usuarioLogado.photoURL,
+          uid: usuarioLogado.uid,
+          texto: texto,
+          dataHora: Date.now()
+        });
+
+        campoRecado.value = '';
+      };
+
+      // Escutar recados em tempo real
+      const q = query(collection(db, "recados"), orderBy("dataHora", "desc"));
+      onSnapshot(q, (snapshot) => {
+        listaRecados.innerHTML = '';
+        snapshot.forEach((documento) => {
+          const dados = documento.data();
+          const id = documento.id;
+
+          // Só cria o botão se o recado pertencer ao usuário logado
+          const podeExcluir = usuarioLogado && dados.uid === usuarioLogado.uid;
+          const htmlBotao = podeExcluir ? `<button class="btn-excluir" onclick="excluirRecado('${id}')">Excluir</button>` : '';
+
+          listaRecados.innerHTML += `
+            <div class="recado">
+              <img src="${dados.foto}" alt="Avatar">
+              <div class="conteudo-recado">
+                <p class="nome-usuario">${dados.nome}</p>
+                <p class="texto-recado">${dados.texto}</p>
+                ${htmlBotao}
+              </div>
+            </div>
+          `;
+        });
+      });
     </script>
   </body>
 </html>
