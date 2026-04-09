@@ -138,13 +138,39 @@
       };
 
       // Escutar recados em tempo real
-      const q = query(collection(db, "recados"), orderBy("dataHora", "desc"));
+      // Escutar recados em tempo real
       onSnapshot(q, (snapshot) => {
         listaRecados.innerHTML = '';
         snapshot.forEach((documento) => {
           const dados = documento.data();
           const id = documento.id;
 
+          // LOGICA DE IMAGEM/GIF:
+          // Se o texto começar com "http" e terminar com extensões de imagem, vira uma foto
+          let conteudoFinal = `<p class="texto-recado">${dados.texto}</p>`;
+          
+          const ehImagem = dados.texto.match(/\.(jpeg|jpg|gif|png)$/) != null;
+          const comecaComHttp = dados.texto.startsWith("http");
+
+          if (ehImagem && comecaComHttp) {
+            conteudoFinal = `<img src="${dados.texto}" style="width: 100%; max-width: 300px; border-radius: 8px; margin-top: 10px; display: block;">`;
+          }
+
+          const podeExcluir = usuarioLogado && dados.uid === usuarioLogado.uid;
+          const htmlBotao = podeExcluir ? `<button class="btn-excluir" onclick="excluirRecado('${id}')">Excluir</button>` : '';
+
+          listaRecados.innerHTML += `
+            <div class="recado">
+              <img src="${dados.foto}" alt="Avatar">
+              <div class="conteudo-recado">
+                <p class="nome-usuario">${dados.nome}</p>
+                ${conteudoFinal}
+                ${htmlBotao}
+              </div>
+            </div>
+          `;
+        });
+      });
           // Só cria o botão se o recado pertencer ao usuário logado
           const podeExcluir = usuarioLogado && dados.uid === usuarioLogado.uid;
           const htmlBotao = podeExcluir ? `<button class="btn-excluir" onclick="excluirRecado('${id}')">Excluir</button>` : '';
