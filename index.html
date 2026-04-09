@@ -3,48 +3,73 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mini-Orkut</title>
+    <title>Mini-Orkut 2.0</title>
     <style>
-      body { background-color: #f0f2f5; font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; padding-top: 50px; gap: 20px; }
+      /* Cores e Fundo */
+      body { background-color: #D9E6F7; font-family: 'Verdana', sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; }
       .escondido { display: none !important; }
-      .tela-login { background-color: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center; }
-      .btn-google { background-color: #4285F4; color: white; border: none; padding: 15px 20px; border-radius: 5px; font-size: 16px; cursor: pointer; font-weight: bold; }
-      .app-container { display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%; max-width: 500px; }
-      .perfil-card { background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center; width: 100%; box-sizing: border-box; }
-      .perfil-card img { border-radius: 50%; width: 120px; height: 120px; object-fit: cover; }
-      .btn-sair { background-color: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
-      .mural-card { background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 100%; box-sizing: border-box; }
-      textarea { width: 100%; height: 80px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc; padding: 10px; font-family: Arial, sans-serif; box-sizing: border-box; resize: none; }
-      .btn-enviar { background-color: #0056b3; color: white; border: none; padding: 12px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold; }
-      .recado { background-color: #f9f9f9; padding: 15px; margin-top: 15px; border-left: 5px solid #0056b3; display: flex; gap: 15px; align-items: flex-start; border-radius: 0 5px 5px 0; }
-      .recado img.foto-autor { width: 45px; height: 45px; border-radius: 50%; }
+
+      /* Topo / Header */
+      header { background-color: #6D84B4; width: 100%; color: white; padding: 10px 0; text-align: center; font-weight: bold; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+
+      /* Tela de Login */
+      .tela-login { background-color: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; margin-top: 100px; }
+      .btn-google { background-color: #4285F4; color: white; border: none; padding: 12px 24px; border-radius: 4px; font-size: 16px; cursor: pointer; font-weight: bold; }
+
+      /* Estrutura Principal (Duas Colunas) */
+      .container-principal { display: flex; width: 90%; max-width: 900px; gap: 20px; align-items: flex-start; }
+
+      /* Coluna Esquerda: Perfil */
+      .coluna-perfil { flex: 1; background-color: white; padding: 20px; border-radius: 8px; border: 1px solid #B4C6E2; text-align: center; }
+      .coluna-perfil img { border-radius: 8px; width: 100%; max-width: 180px; border: 3px solid #6D84B4; }
+      .coluna-perfil h2 { font-size: 18px; color: #003399; margin: 15px 0 5px 0; }
+      .btn-sair { background: none; border: none; color: #dc3545; text-decoration: underline; cursor: pointer; font-size: 12px; }
+
+      /* Coluna Direita: Mural */
+      .coluna-mural { flex: 2; background-color: #E7EBF4; padding: 20px; border-radius: 8px; border: 1px solid #B4C6E2; }
+      .coluna-mural h3 { color: #003399; margin-top: 0; border-bottom: 1px solid #B4C6E2; padding-bottom: 10px; }
+
+      /* Caixa de Texto */
+      textarea { width: 100%; height: 70px; border-radius: 4px; border: 1px solid #B4C6E2; padding: 10px; box-sizing: border-box; resize: none; margin-bottom: 10px; }
+      .btn-enviar { background-color: #6D84B4; color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; }
+      .btn-enviar:hover { background-color: #4e628a; }
+
+      /* Estilo dos Recados (Scraps) */
+      .recado { background-color: white; padding: 15px; margin-top: 15px; border: 1px solid #B4C6E2; border-radius: 4px; display: flex; gap: 15px; }
+      .recado img.foto-autor { width: 50px; height: 50px; border-radius: 4px; border: 1px solid #6D84B4; }
       .conteudo-recado { flex: 1; }
-      .nome-usuario { font-weight: bold; color: #333; margin: 0; }
-      .texto-recado { margin: 5px 0; color: #555; line-height: 1.4; word-break: break-all; }
-      .btn-excluir { background: none; border: none; color: #dc3545; font-size: 12px; cursor: pointer; padding: 0; font-weight: bold; text-decoration: underline; margin-top: 5px; }
-      .img-recado { width: 100%; max-width: 300px; border-radius: 8px; margin-top: 10px; display: block; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+      .nome-usuario { font-weight: bold; color: #003399; margin: 0; font-size: 14px; }
+      .texto-recado { margin: 5px 0; color: #333; font-size: 13px; line-height: 1.4; word-break: break-all; }
+      .btn-excluir { background: none; border: none; color: #cc0000; font-size: 11px; cursor: pointer; text-decoration: underline; padding: 0; }
+      .img-recado { width: 100%; max-width: 250px; border-radius: 4px; margin-top: 10px; display: block; }
     </style>
   </head>
   <body>
 
+    <header id="header-app" class="escondido">Mini-Orkut</header>
+
     <div id="tela-login" class="tela-login">
       <h1>Mini-Orkut</h1>
-      <p>Conecte-se para ver os scraps.</p>
-      <button id="btn-login-google" class="btn-google">Entrar com o Google</button>
+      <p>Faça login para entrar na sua conta.</p>
+      <button id="btn-login-google" class="btn-google">Entrar com Google</button>
     </div>
 
-    <div id="app-principal" class="app-container escondido">
-      <div class="perfil-card">
-        <img id="foto-perfil" src="" alt="Foto">
+    <div id="app-principal" class="container-principal escondido">
+      
+      <aside class="coluna-perfil">
+        <img id="foto-perfil" src="" alt="Sua Foto">
         <h2 id="nome-perfil">...</h2>
-        <button id="btn-sair" class="btn-sair">Sair da Conta</button>
-      </div>
-      <div class="mural-card">
-        <h3>Scrapbook</h3>
-        <textarea id="campo-recado" placeholder="Poste um texto ou link de imagem/GIF..."></textarea>
-        <button id="botao-enviar" class="btn-enviar">Postar Recado</button>
+        <button id="btn-sair" class="btn-sair">Sair</button>
+      </aside>
+
+      <main class="coluna-mural">
+        <h3>Scrapbook (Recados)</h3>
+        <textarea id="campo-recado" placeholder="O que você está pensando? (Texto ou link de imagem/GIF)"></textarea>
+        <button id="botao-enviar" class="btn-enviar">Enviar Scrap</button>
+        
         <div id="lista-recados"></div>
-      </div>
+      </main>
+
     </div>
 
     <script type="module">
@@ -68,6 +93,7 @@
 
       const telaLogin = document.getElementById('tela-login');
       const appPrincipal = document.getElementById('app-principal');
+      const headerApp = document.getElementById('header-app');
       const btnLoginGoogle = document.getElementById('btn-login-google');
       const btnSair = document.getElementById('btn-sair');
       const fotoPerfil = document.getElementById('foto-perfil');
@@ -88,10 +114,12 @@
           fotoPerfil.src = user.photoURL;
           telaLogin.classList.add('escondido');
           appPrincipal.classList.remove('escondido');
+          headerApp.classList.remove('escondido');
         } else {
           usuarioLogado = null;
           telaLogin.classList.remove('escondido');
           appPrincipal.classList.add('escondido');
+          headerApp.classList.add('escondido');
         }
       });
 
@@ -119,7 +147,6 @@
           const dados = documento.data();
           const id = documento.id;
 
-          // Lógica de Detecção de Imagem/GIF
           let conteudoFinal = `<p class="texto-recado">${dados.texto}</p>`;
           const ehImagem = dados.texto.match(/\.(jpeg|jpg|gif|png|webp)$/i) != null;
           const comecaComHttp = dados.texto.startsWith("http");
